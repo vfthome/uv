@@ -30,12 +30,12 @@ use crate::commands::project::install_target::InstallTarget;
 use crate::commands::project::lock::LockMode;
 use crate::commands::project::lock_target::LockTarget;
 use crate::commands::project::{
-    LinkErrorReporting, ProjectEnvironment, ProjectEnvironmentPolicy, ProjectError,
-    ProjectInterpreter, ScriptEnvironment, ScriptInterpreter, UniversalState, WorkspacePython,
+    LinkErrorReporting, ProjectEnvironment, ProjectEnvironmentPolicy, ProjectInterpreter,
+    ScriptEnvironment, ScriptInterpreter, UniversalState, WorkspacePython,
     default_dependency_groups, validate_project_requires_python,
 };
 use crate::commands::reporters::PythonDownloadReporter;
-use crate::commands::{ExitStatus, UvError, diagnostics, project};
+use crate::commands::{ExitStatus, UvError, project};
 use crate::printer::Printer;
 use crate::settings::{FrozenSource, LockCheck, ResolverInstallerSettings};
 
@@ -422,9 +422,6 @@ pub(crate) async fn check(
         .await
         {
             Ok(result) => result,
-            Err(ProjectError::Operation(err)) => {
-                return Err(diagnostics::operation_error(err, None).into());
-            }
             Err(err) => return Err(UvError::from(err).into()),
         };
 
@@ -477,9 +474,6 @@ pub(crate) async fn check(
         .await
         {
             Ok(_) => {}
-            Err(ProjectError::Operation(err)) => {
-                return Err(diagnostics::operation_error(err, None).into());
-            }
             Err(err) => return Err(UvError::from(err).into()),
         }
 
@@ -593,9 +587,6 @@ pub(crate) async fn check(
         .await
         {
             Ok(result) => result,
-            Err(ProjectError::Operation(err)) => {
-                return Err(diagnostics::operation_error(err, None).into());
-            }
             Err(err) => return Err(UvError::from(err).into()),
         };
 
@@ -659,9 +650,6 @@ pub(crate) async fn check(
                 .await
                 {
                     Ok(environment) => environment,
-                    Err(ProjectError::Operation(err)) => {
-                        return Err(diagnostics::operation_error(err, None).into());
-                    }
                     Err(err) => return Err(UvError::from(err).into()),
                 };
                 malware_context.record_resolution(&resolution);
@@ -709,9 +697,6 @@ pub(crate) async fn check(
             .await
             {
                 Ok(_) => {}
-                Err(ProjectError::Operation(err)) => {
-                    return Err(diagnostics::operation_error(err, None).into());
-                }
                 Err(err) => return Err(UvError::from(err).into()),
             }
         }
