@@ -3745,6 +3745,52 @@ fn python_install_upgrade_version_file() {
 }
 
 #[test]
+fn python_install_upgrade_invalid_request_quiet_modes() -> anyhow::Result<()> {
+    let context = uv_test::test_context_with_versions!(&[]).with_managed_python_dirs();
+    context
+        .temp_dir
+        .child(".python-version")
+        .write_str("3.12.4\n")?;
+
+    for quiet in [None, Some("-q"), Some("-qq")] {
+        let mut command = context.python_install();
+        command.arg("--upgrade");
+        if let Some(quiet) = quiet {
+            command.arg(quiet);
+        }
+        let assertion = command.assert().code(1);
+        if quiet == Some("-qq") {
+            assertion.stderr("");
+        } else {
+            assertion
+                .stderr(predicate::str::contains(
+                    "error: `uv python install --upgrade` only accepts minor versions, got: 3.12.4",
+                ))
+                .stderr(predicate::str::contains(
+                    "hint: The version request came from a `.python-version` file",
+                ));
+        }
+    }
+
+    for quiet in [None, Some("-q"), Some("-qq")] {
+        let mut command = context.python_upgrade();
+        command.arg("3.12.4");
+        if let Some(quiet) = quiet {
+            command.arg(quiet);
+        }
+        let assertion = command.assert().code(1);
+        if quiet == Some("-qq") {
+            assertion.stderr("");
+        } else {
+            assertion
+                .stderr("error: `uv python upgrade` only accepts minor versions, got: 3.12.4\n");
+        }
+    }
+
+    Ok(())
+}
+
+#[test]
 fn python_install_armv7() {
     let context = uv_test::test_context_with_versions!(&[])
         .with_filtered_python_keys()
