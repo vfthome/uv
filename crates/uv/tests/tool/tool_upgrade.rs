@@ -4,7 +4,7 @@ use anyhow::{Result, bail};
 use assert_cmd::assert::OutputAssertExt;
 use assert_fs::prelude::*;
 use indoc::indoc;
-use insta::assert_snapshot;
+use insta::{allow_duplicates, assert_snapshot};
 use predicates::prelude::predicate;
 use serde_json::json;
 use wiremock::{
@@ -1684,27 +1684,30 @@ async fn tool_upgrade_resolution_hints_quiet_modes() -> Result<()> {
         .mount(&server)
         .await;
 
-    for quiet in [None, Some("-q"), Some("-qq")] {
-        let mut command = context.tool_upgrade();
-        command
-            .arg("simple-launcher>0.1.0")
-            .arg("--index-url")
-            .arg(&index_url)
-            .arg("--no-cache")
-            .env(EnvVars::PATH, bin_dir.as_os_str());
-        if let Some(quiet) = quiet {
-            command.arg(quiet);
-        }
-        let assertion = command.assert().code(1);
-        if quiet == Some("-qq") {
-            assertion.stderr("");
-        } else {
-            assertion
-                .stderr(predicate::str::contains(
-                    "error: Failed to upgrade simple-launcher",
-                ))
-                .stderr(predicate::str::contains("hint: An index URL"))
-                .stderr(predicate::str::contains("401 Unauthorized"));
+    allow_duplicates! {
+        for quiet in [None, Some("-q"), Some("-qq")] {
+            let mut command = context.tool_upgrade();
+            command
+                .arg("simple-launcher>0.1.0")
+                .arg("--index-url")
+                .arg(&index_url)
+                .arg("--no-cache")
+                .env(EnvVars::PATH, bin_dir.as_os_str());
+            if let Some(quiet) = quiet {
+                command.arg(quiet);
+            }
+            if quiet == Some("-qq") {
+                uv_snapshot!(context.filters(), command, @"exit_code: 1 (failure)");
+            } else {
+                uv_snapshot!(context.filters(), command, @"
+                exit_code: 1 (failure)
+                ----- stderr -----
+                error: Failed to upgrade simple-launcher
+                  Caused by: Because simple-launcher was not found in the package registry and you require simple-launcher>0.1.0, we can conclude that your requirements are unsatisfiable.
+
+                hint: An index URL (http://[LOCALHOST]/simple) could not be queried due to a lack of valid authentication credentials (401 Unauthorized)
+                ");
+            }
         }
     }
 
