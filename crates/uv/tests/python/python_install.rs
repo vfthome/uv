@@ -10,6 +10,7 @@ use assert_fs::{
     prelude::{FileTouch, FileWriteStr, PathChild, PathCreateDir},
 };
 use indoc::indoc;
+use insta::allow_duplicates;
 use predicates::prelude::predicate;
 use tracing::debug;
 use uv_test::{LATEST_PYTHON_3_12, uv_snapshot};
@@ -3752,38 +3753,43 @@ fn python_install_upgrade_invalid_request_quiet_modes() -> anyhow::Result<()> {
         .child(".python-version")
         .write_str("3.12.4\n")?;
 
-    for quiet in [None, Some("-q"), Some("-qq")] {
-        let mut command = context.python_install();
-        command.arg("--upgrade");
-        if let Some(quiet) = quiet {
-            command.arg(quiet);
-        }
-        let assertion = command.assert().code(1);
-        if quiet == Some("-qq") {
-            assertion.stderr("");
-        } else {
-            assertion
-                .stderr(predicate::str::contains(
-                    "error: `uv python install --upgrade` only accepts minor versions, got: 3.12.4",
-                ))
-                .stderr(predicate::str::contains(
-                    "hint: The version request came from a `.python-version` file",
-                ));
+    allow_duplicates! {
+        for quiet in [None, Some("-q"), Some("-qq")] {
+            let mut command = context.python_install();
+            command.arg("--upgrade");
+            if let Some(quiet) = quiet {
+                command.arg(quiet);
+            }
+            if quiet == Some("-qq") {
+                uv_snapshot!(context.filters(), command, @"exit_code: 1 (failure)");
+            } else {
+                uv_snapshot!(context.filters(), command, @"
+                exit_code: 1 (failure)
+                ----- stderr -----
+                error: `uv python install --upgrade` only accepts minor versions, got: 3.12.4
+
+                hint: The version request came from a `.python-version` file; change the patch version in the file to upgrade instead
+                ");
+            }
         }
     }
 
-    for quiet in [None, Some("-q"), Some("-qq")] {
-        let mut command = context.python_upgrade();
-        command.arg("3.12.4");
-        if let Some(quiet) = quiet {
-            command.arg(quiet);
-        }
-        let assertion = command.assert().code(1);
-        if quiet == Some("-qq") {
-            assertion.stderr("");
-        } else {
-            assertion
-                .stderr("error: `uv python upgrade` only accepts minor versions, got: 3.12.4\n");
+    allow_duplicates! {
+        for quiet in [None, Some("-q"), Some("-qq")] {
+            let mut command = context.python_upgrade();
+            command.arg("3.12.4");
+            if let Some(quiet) = quiet {
+                command.arg(quiet);
+            }
+            if quiet == Some("-qq") {
+                uv_snapshot!(context.filters(), command, @"exit_code: 1 (failure)");
+            } else {
+                uv_snapshot!(context.filters(), command, @"
+                exit_code: 1 (failure)
+                ----- stderr -----
+                error: `uv python upgrade` only accepts minor versions, got: 3.12.4
+                ");
+            }
         }
     }
 
