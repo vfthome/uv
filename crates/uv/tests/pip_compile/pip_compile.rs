@@ -1991,7 +1991,7 @@ fn compile_python_37() -> Result<()> {
             .arg("3.7"), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because the requested Python version (>=3.7) does not satisfy Python>=3.8 and black==23.10.1 depends on Python>=3.8, we can conclude that black==23.10.1 cannot be used.
         And because you require black==23.10.1, we can conclude that your requirements are unsatisfiable.
 
@@ -2672,7 +2672,7 @@ fn conflicting_direct_url_dependency() -> Result<()> {
             .arg("requirements.in"), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because there is no version of werkzeug==3.0.0 and you require werkzeug==3.0.0, we can conclude that your requirements are unsatisfiable.
     "
     );
@@ -2787,7 +2787,7 @@ fn conflicting_transitive_url_dependency() -> Result<()> {
             .arg("requirements.in"), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because only werkzeug<3.0.0 is available and flask==3.0.0 depends on werkzeug>=3.0.0, we can conclude that flask==3.0.0 cannot be used.
         And because you require flask==3.0.0, we can conclude that your requirements are unsatisfiable.
     "
@@ -3123,7 +3123,7 @@ fn requirement_constraint_override_url() -> Result<()> {
         .arg("overrides.txt"), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because there is no version of anyio==3.7.0 and you require anyio==3.7.0, we can conclude that your requirements are unsatisfiable.
     "
     );
@@ -3340,7 +3340,7 @@ dependencies = ["anyio==3.7.0", "anyio==4.0.0"]
             .arg("pyproject.toml"), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because my-project depends on anyio==3.7.0 and anyio==4.0.0, we can conclude that your requirements are unsatisfiable.
     "
     );
@@ -3370,7 +3370,7 @@ dependencies = ["anyio==300.1.4"]
             .arg("pyproject.toml"), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because there is no version of anyio==300.1.4 and my-project depends on anyio==300.1.4, we can conclude that your requirements are unsatisfiable.
     "
     );
@@ -3956,7 +3956,7 @@ fn compile_yanked_version_indirect() -> Result<()> {
             .arg("requirements.in"), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because attrs==21.1.0 was yanked (reason: Installable but not importable on Python 3.4) and only the following versions of attrs are available:
             attrs<=20.3.0
             attrs==21.1.0
@@ -7084,7 +7084,7 @@ fn no_index_requirements_txt() -> Result<()> {
             .arg("requirements.in"), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because tqdm was not found in the provided package locations and you require tqdm, we can conclude that your requirements are unsatisfiable.
 
     hint: Packages were unavailable because index lookups were disabled and no additional package locations were provided (try: `--find-links <uri>`)
@@ -7186,7 +7186,7 @@ fn offline_registry() -> Result<()> {
             .arg("--offline"), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because black was not found in the cache and you require black==23.10.1, we can conclude that your requirements are unsatisfiable.
 
     hint: Packages were unavailable because the network was disabled. When the network is disabled, registry packages may only be read from the cache.
@@ -7259,7 +7259,7 @@ fn offline_registry_prerelease() -> Result<()> {
             .arg("--offline"), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because flask was not found in the cache and you require flask==2.0.0rc1, we can conclude that your requirements are unsatisfiable.
 
     hint: Packages were unavailable because the network was disabled. When the network is disabled, registry packages may only be read from the cache.
@@ -7331,7 +7331,7 @@ fn offline_find_links() -> Result<()> {
             .arg("--offline"), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because tqdm was not found in the cache and you require tqdm, we can conclude that your requirements are unsatisfiable.
 
     hint: Packages were unavailable because the network was disabled. When the network is disabled, registry packages may only be read from the cache.
@@ -7347,7 +7347,7 @@ fn offline_find_links() -> Result<()> {
             .arg("--offline"), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because tqdm was not found in the cache and you require tqdm, we can conclude that your requirements are unsatisfiable.
 
     hint: Packages were unavailable because the network was disabled. When the network is disabled, registry packages may only be read from the cache.
@@ -7425,7 +7425,7 @@ fn invalid_metadata_requires_python() -> Result<()> {
             .arg(context.workspace_root.join("test").join("links")), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because validation==2.0.0 has invalid metadata and you require validation==2.0.0, we can conclude that your requirements are unsatisfiable.
 
     hint: Metadata for `validation` (v2.0.0) could not be parsed:
@@ -7453,7 +7453,7 @@ fn invalid_metadata_multiple_dist_info() -> Result<()> {
             .arg(context.workspace_root.join("test").join("links")), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because validation==3.0.0 has an invalid package format and you require validation==3.0.0, we can conclude that your requirements are unsatisfiable.
 
     hint: The structure of `validation` (v3.0.0) was invalid:
@@ -7736,7 +7736,7 @@ fn compile_constraints_incompatible_url() -> Result<()> {
             .arg("constraints.txt"), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because only anyio>=4 is available and you require anyio<4, we can conclude that your requirements are unsatisfiable.
     "
     );
@@ -7757,7 +7757,7 @@ fn index_url_in_requirements() -> Result<()> {
             .arg("requirements.in"), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because anyio was not found in the package registry and you require anyio<4, we can conclude that your requirements are unsatisfiable.
     "
     );
@@ -10492,7 +10492,7 @@ fn compile_constraints_incompatible_version() -> Result<()> {
             .arg("constraints.txt"), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because you require filelock==1.0.0 and filelock==3.8.0, we can conclude that your requirements are unsatisfiable.
     "
     );
@@ -10517,7 +10517,7 @@ fn conflicting_url_markers() -> Result<()> {
             .arg("constraints.txt"), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because you require filelock==1.0.0 and filelock==3.8.0, we can conclude that your requirements are unsatisfiable.
     "
     );
@@ -10665,7 +10665,7 @@ fn override_with_incompatible_constraint() -> Result<()> {
             .arg("overrides.txt"), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because you require anyio>=3.0.0 and anyio<3.0.0, we can conclude that your requirements are unsatisfiable.
     "
     );
@@ -11087,7 +11087,7 @@ fn compile_pyproject_toml_recursive_extra_self_constraint() -> Result<()> {
         .arg("--no-build"), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because recursive-demo depends on recursive-demo{sys_platform == 'darwin'}>=2 and recursive-demo{sys_platform == 'darwin'}==1.0.0, we can conclude that your requirements are unsatisfiable.
     ");
 
@@ -11100,7 +11100,7 @@ fn compile_pyproject_toml_recursive_extra_self_constraint() -> Result<()> {
         .arg("--no-build"), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because only recursive-demo[outer]==1.0.0 is available and recursive-demo[outer]==1.0.0 depends on recursive-demo{sys_platform == 'darwin'}>=2, we can conclude that all versions of recursive-demo[outer] cannot be used.
         And because you require recursive-demo[outer], we can conclude that your requirements are unsatisfiable.
     ");
@@ -11848,7 +11848,7 @@ requires-python = ">=3.13"
         .arg("requirements.in"), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because the current Python version (3.12.[X]) does not satisfy Python>=3.13 and example==0.0.0 depends on Python>=3.13, we can conclude that example==0.0.0 cannot be used.
         And because only example==0.0.0 is available and you require example, we can conclude that your requirements are unsatisfiable.
     "
@@ -11887,7 +11887,7 @@ requires-python = ">=3.13"
     exit_code: 1 (failure)
     ----- stderr -----
     warning: The requested Python version 3.11 is not available; 3.12.[X] will be used to build dependencies instead.
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because the requested Python version (>=3.11) does not satisfy Python>=3.13 and example==0.0.0 depends on Python>=3.13, we can conclude that example==0.0.0 cannot be used.
         And because only example==0.0.0 is available and you require example, we can conclude that your requirements are unsatisfiable.
 
@@ -12120,7 +12120,7 @@ requires-python = ">=3.13"
         .arg("requirements.in"), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because the current Python version (3.12.[X]) does not satisfy Python>=3.13 and example==0.0.0 depends on Python>=3.13, we can conclude that example==0.0.0 cannot be used.
         And because only example==0.0.0 is available and you require example, we can conclude that your requirements are unsatisfiable.
     "
@@ -13212,7 +13212,7 @@ requires-python = ">3.8"
         .arg("overrides.txt"), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because there is no version of anyio==0.0.0 and lib==0.0.0 depends on anyio==0.0.0, we can conclude that lib==0.0.0 cannot be used.
         And because only lib==0.0.0 is available and example==0.0.0 depends on lib, we can conclude that example==0.0.0 cannot be used.
         And because only example==0.0.0 is available and you require example, we can conclude that your requirements are unsatisfiable.
@@ -13379,7 +13379,7 @@ fn compile_index_url_first_match_base() -> Result<()> {
         .arg("--no-deps"), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because there is no version of jinja2==3.1.0 and you require jinja2==3.1.0, we can conclude that your requirements are unsatisfiable.
 
     hint: `jinja2` was found on https://astral-sh.github.io/pytorch-mirror/whl/cpu, but not at the requested version (jinja2==3.1.0). A compatible version may be available on a subsequent index (e.g., https://pypi.org/simple). By default, uv will only consider versions that are published on the first index that contains a given package, to avoid dependency confusion attacks. If all indexes are equally trusted, use `--index-strategy unsafe-best-match` to consider all versions from all indexes, regardless of the order in which they were defined.
@@ -13411,7 +13411,7 @@ fn compile_index_url_first_match_marker() -> Result<()> {
         .arg("--no-deps"), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because there is no version of jinja2{sys_platform == 'linux'}==3.1.0 and you require jinja2{sys_platform == 'linux'}==3.1.0, we can conclude that your requirements are unsatisfiable.
 
     hint: `jinja2` was found on https://astral-sh.github.io/pytorch-mirror/whl/cpu, but not at the requested version (jinja2==3.1.0). A compatible version may be available on a subsequent index (e.g., https://pypi.org/simple). By default, uv will only consider versions that are published on the first index that contains a given package, to avoid dependency confusion attacks. If all indexes are equally trusted, use `--index-strategy unsafe-best-match` to consider all versions from all indexes, regardless of the order in which they were defined.
@@ -13441,7 +13441,7 @@ fn compile_index_url_first_match_all_versions() -> Result<()> {
         .arg("--no-deps"), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because there are no versions of pandas and you require pandas, we can conclude that your requirements are unsatisfiable.
     "
     );
@@ -13814,7 +13814,7 @@ fn no_version_for_direct_dependency() -> Result<()> {
         .arg("--offline"), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: you require pypyp==1 and pypyp>=1.2, which are incompatible
     "
     );
@@ -14423,7 +14423,7 @@ fn no_binary_only_binary() -> Result<()> {
         .arg(":all:"), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because source-distribution==0.0.1 has no usable wheels and only source-distribution>=0.0.1 is available, we can conclude that source-distribution<=0.0.1 cannot be used.
         And because you require source-distribution<=0.0.1, we can conclude that your requirements are unsatisfiable.
 
@@ -14997,7 +14997,7 @@ fn universal_required_environment() -> Result<()> {
         .env_remove(EnvVars::UV_EXCLUDE_NEWER), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies for split (markers: platform_machine == 'arm64'):
+    error: No solution found when resolving dependencies for split (markers: platform_machine == 'arm64')
       Caused by: Because a==1.0.0 has no `platform_machine == 'arm64'`-compatible wheels and only a==1.0.0 is available, we can conclude that all versions of a cannot be used.
         And because project depends on a, we can conclude that your requirements are unsatisfiable.
     ");
@@ -15017,7 +15017,7 @@ fn compile_enumerate_no_versions() -> Result<()> {
     @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because the current Python version (3.10.[X]) does not satisfy Python>=3.11,<4.0 and all versions of rooster-blue depend on Python>=3.11,<4.0, we can conclude that all versions of rooster-blue cannot be used.
         And because you require rooster-blue, we can conclude that your requirements are unsatisfiable.
     ");
@@ -15461,7 +15461,7 @@ fn unsupported_requires_python_dynamic_metadata() -> Result<()> {
         .arg("requirements.in"), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies for split (markers: python_full_version >= '3.10'):
+    error: No solution found when resolving dependencies for split (markers: python_full_version >= '3.10')
       Caused by: Because source-distribution==0.0.3 requires Python >=3.10 and you require source-distribution{python_full_version >= '3.10'}==0.0.3, we can conclude that your requirements are unsatisfiable.
 
     hint: While the active Python version is 3.8, the resolution failed for other Python versions supported by your project. Consider limiting your project's supported Python versions using `requires-python`.
@@ -15620,7 +15620,7 @@ fn invalid_platform() -> Result<()> {
         .arg("requirements.in"), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because open3d<=0.15.2 has no wheels with a matching Python ABI tag (e.g., `cp310`) and only the following versions of open3d are available:
             open3d<=0.15.2
             open3d>=0.16.0
@@ -18477,7 +18477,7 @@ fn incompatible_cuda() -> Result<()> {
         .arg("3.11"), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because torchvision==0.17.1+cu118 depends on system:cuda==11.8 and torch>=2.2.1+cu121 depends on system:cuda==12.1, we can conclude that torch>=2.2.1+cu121 and torchvision==0.17.1+cu118 are incompatible.
         And because you require torch==2.2.1+cu121 and torchvision==0.17.1+cu118, we can conclude that your requirements are unsatisfiable.
     ");
@@ -18724,7 +18724,7 @@ async fn credentials_from_subdirectory() -> Result<()> {
         .arg("foo/pyproject.toml"), @"
     exit_code: 1 (failure)
     ----- stderr -----
-    error: No solution found when resolving dependencies:
+    error: No solution found when resolving dependencies
       Caused by: Because iniconfig was not found in the package registry and foo depends on iniconfig, we can conclude that your requirements are unsatisfiable.
     ");
 
